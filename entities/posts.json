@@ -1,0 +1,19 @@
+{ 
+    "name": "posts", 
+    "columns": { 
+       "id": { 
+          "primary": true, 
+          "type": "int", 
+          "generated": true 
+       }, 
+       "name": { 
+          "type": "varchar" 
+       }, 
+       "email": { 
+          "type": "integer" 
+       },
+       "password": { 
+        "type": "varchar" 
+        } 
+    } 
+ }
