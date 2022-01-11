@@ -1,7 +1,20 @@
+const express  = require('express');
+const bodyParser = require('body-parser');
 var typeorm = require("typeorm"); var EntitySchema = typeorm.EntitySchema;
 const http = require('http');
 const app  = require('./app');
-typeorm.createConnection({
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const cors = require('cors')
+
+app.use(cors({
+    origin: "*",
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}))
+app.use(express.json())
+
+var connection =  typeorm.createConnection({
     "type": "mysql",
     "host": "localhost",
     "port": 3306,
@@ -22,3 +35,5 @@ typeorm.createConnection({
     console.log("Error: ", error)
     return;
 });
+
+module.exports = connection

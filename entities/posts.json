@@ -10,7 +10,7 @@
           "type": "varchar" 
        }, 
        "email": { 
-          "type": "integer" 
+          "type": "varchar" 
        },
        "password": { 
         "type": "varchar" 
