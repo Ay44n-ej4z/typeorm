@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express');
 const jwt = require('jsonwebtoken');
-
 const bodyParser = require('body-parser');
 const router = express.Router();
 var typeorm = require('typeorm');
@@ -9,6 +8,7 @@ const connection = require('../server')
 const Post = require('../post')
 const bcrypt = require('bcryptjs');
 const posts_table = "posts";
+
 router.use(bodyParser.json())
 
 
@@ -26,19 +26,17 @@ router.get('/login', async (req, res) => {
 router.post('/posts', async (req, res) => {
 
     const connection = typeorm.getConnection();
-    const rounds = 10   
-    const { name, email, password } = req.body;
-    bcrypt.hash(password, rounds, async(err, hash) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        // console.log(hash)
-        // password = hash
-    await connection.getRepository(posts_table)
+   
+    var { name, email, password } = req.body;
+    password = await bcrypt.hash(password, 10);
+
+   const register = await connection.getRepository(posts_table)
     .createQueryBuilder()
     .insert()
-    .values({ name, email, password: hash }).execute();
+    .values({ name, email, password }).execute();
+      res.status(200).send({
+          register,
+          "Message": "Registered Successfully"
       })
     
 })
@@ -54,13 +52,13 @@ router.post('/userLogin', async (req, res) => {
         // accToken = token
         // console.log(accToken)
 
-        const passMatch = await bcrypt.compare(req.body.password, hash);
-        let userLogin = await result.findOne({ email: req.body.email, passMatch });
-        
+        // const passMatch = await bcrypt.compare(req.body.password, hash);
+        var userLogin = await result.findOne({ email: req.body.email});
+        var pass = await bcrypt.compare(req.body.password, userLogin.password)
         console.log("Data ", userLogin);
 
         // res.status(401).send()    
-        if (userLogin === undefined) {
+        if (userLogin === undefined || pass === false) {
             res.send({
                 "Message": "user Not found"
             })

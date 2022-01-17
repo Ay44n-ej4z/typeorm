@@ -1,17 +1,18 @@
+const cors = require('cors');
 const express  = require('express');
 const bodyParser = require('body-parser');
 var typeorm = require("typeorm"); var EntitySchema = typeorm.EntitySchema;
 const http = require('http');
 const app  = require('./app');
 
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const cors = require('cors')
-
 app.use(cors({
     origin: "*",
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }))
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
 app.use(express.json())
 
 var connection =  typeorm.createConnection({
